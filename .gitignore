@@ -6,6 +6,7 @@
 .*
 !.gitignore
 ~*
+#ignore sublime, and also logs
 *.sublime-project
 *.sublime-workspace
 *.log
