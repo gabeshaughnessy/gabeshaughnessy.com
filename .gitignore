@@ -2,10 +2,12 @@
 /*
 !wp-content/
 !readme.md
+
 #ignore all the files that start with a . except this one
 .*
 !.gitignore
 ~*
+
 #ignore sublime, and also logs
 *.sublime-project
 *.sublime-workspace
