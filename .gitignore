@@ -24,6 +24,10 @@
 *.o
 *.so
 
+#ingore composer
+composer.*
+polly/vendor/
+
 #ignore mp3 files
 *.mp3
 
