@@ -77,7 +77,7 @@ if(isset($_GET['browser'])){
      if($whichBrowser->device->manufacturer == 'Apple'){
         $device .= 'You must have a lot of cash lying around to afford one of those fancy machines.';
      }else{
-        $device .= 'A sensible choice, for the sensible internet user. I applaud you. ';
+        $device .= 'A sensible choice, for the sensible internet user. I applaud your selection. ';
      }
     }else{
      $browser = '';
