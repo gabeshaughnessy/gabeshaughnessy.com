@@ -24,6 +24,9 @@
 *.o
 *.so
 
+#ignore mp3 files
+*.mp3
+
 # ignore packaged files
 *.7z
 *.dmg

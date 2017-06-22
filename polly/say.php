@@ -25,5 +25,5 @@ $result = $pollyClient->synthesizeSpeech([
 ]);
 $mp3 = $result['AudioStream']->__toString();
 file_put_contents('sdk.mp3', $mp3);
-echo '<video controls="" autoplay="" name="media"><source src="/sdk.mp3" type="audio/mpeg"></video>';
+echo '<video controls="" autoplay="" name="media"><source src="/polly/sdk.mp3" type="audio/mpeg"></video>';
 ?>
