@@ -59,6 +59,8 @@ $greeting = 'Hello ';
 $message = $greeting.$name.', My name is '.$voice.'. ';
 $message .= $time.$weather.$browser;
 
+$message.= 'What you are hearing is actually a recording of my voice, saved as a file somewhere in the cloud';
+
 
 
 $filename = date('g:i A').$name.$voice.filter_input(INPUT_GET,'browser',FILTER_SANITIZE_STRING);
