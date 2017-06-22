@@ -63,6 +63,7 @@ $message .= $time.$weather.$browser;
 
 $filename = date('g:i A').$name.$voice.filter_input(INPUT_GET,'browser',FILTER_SANITIZE_STRING);
 $filename = str_replace(' ', '', $filename).'.mp3';
+$filename = filter_var($filename, FILTER_SANITIZE_URL);
 $pollyClient = $sdk->createPolly();
 
 $result = $pollyClient->synthesizeSpeech([
@@ -74,6 +75,16 @@ $result = $pollyClient->synthesizeSpeech([
 
 $mp3str = $result['AudioStream']->__toString();
 
-file_put_contents($filename, $mp3str);//replace this with an s3 bucket.
-echo '<video controls="" autoplay="" name="media"><source src="/polly/'.$filename.'" type="audio/mpeg"></video>';
+$s3Client = $sdk->createS3();
+
+$bucket = 'uploads.gabeshaughnessy.com';
+$directory = 'mp3';
+$putFile = $s3Client->putObject([
+    'Bucket' => $bucket,
+    'Key'    => $filename,
+    'Body'   => $directory.'/'.$mp3str
+]);
+$mp3url = $s3Client->getObjectUrl($bucket, $filename);
+
+echo '<video controls="" autoplay="" name="media"><source src="'.$mp3url.'" type="audio/mpeg"></video>';
 ?>
