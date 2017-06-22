@@ -9,21 +9,71 @@ $sharedConfig = [
 
 $sdk = new Aws\Sdk($sharedConfig);
 
+//Voice
 $voices = array('Geraint','Gwyneth','Mads','Naja','Hans','Marlene','Nicole','Russell','Amy','Brian','Emma','Raveena','Ivy','Joanna','Joey','Justin','Kendra','Kimberly','Salli','Conchita','Enrique','Miguel','Penelope','Chantal','Celine','Mathieu','Dora','Karl','Carla','Giorgio','Mizuki','Liv','Lotte','Ruben','Ewa','Jacek','Jan','Maja','Ricardo','Vitoria','Cristiano','Ines','Carmen','Maxim','Tatyana','Astrid','Filiz');
-if(isset($_GET['voice']) && in_array(filter_input(INPUT_GET,'voice'), $voices)){
+if(isset($_GET['voice']) && in_array(filter_input(INPUT_GET,'voice',FILTER_SANITIZE_STRING), $voices)){
  $voice = $_GET['voice'];
 }else{
- $voice = 'Russell';
+ $voice = 'Brian';
 }
+
+if(isset($_GET['name']) && !empty($_GET['name'])){
+ $name = filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING);
+}else{
+ $name = 'there';
+}
+//Time
+date_default_timezone_set('America/Los_Angeles');
+$time = 'I presently reside on a server in Oregon, where it is currently '. date('g:i A') .'. ';
+
+//Weather
+$weatherAPIkey ='APPID=1794446ecd9deb919b2575a760e4ce9a';
+$location = 'zip=97203';
+$url = 'http://api.openweathermap.org/data/2.5/weather?units=imperial&'.$location.'&'.$weatherAPIkey;
+$ch = curl_init($url);
+    curl_setopt($ch,  CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('accept: application/json',));
+$response = json_decode(curl_exec($ch));
+
+if(isset($response->weather) && !empty($response->weather[0])){
+    $temp = $response->main->temp;
+    $conditions = $response->weather[0]->description;
+    $weather = 'It is '.$temp.' degrees Farenheit and '.$conditions.'. ';
+}else{
+    $weather = '';
+}
+
+
+
+
+//Browser
+if(isset($_GET['browser']) && !empty($_GET['browser'])){
+ $browser = 'It looks like you are using '.filter_input(INPUT_GET,'browser',FILTER_SANITIZE_STRING).' to visit this web page. ';
+}else{
+ $browser = '';
+}
+//Message
+
+$greeting = 'Hello ';
+
+$message = $greeting.$name.', My name is '.$voice.'. ';
+$message .= $time.$weather.$browser;
+
+
+
+$filename = date('g:i A').$name.$voice.filter_input(INPUT_GET,'browser',FILTER_SANITIZE_STRING);
+$filename = str_replace(' ', '', $filename).'.mp3';
 $pollyClient = $sdk->createPolly();
 
 $result = $pollyClient->synthesizeSpeech([
     'OutputFormat' => 'mp3', // REQUIRED
-    'Text' => 'Hi there, this was created with the PHP SDK for AWS', // REQUIRED
+    'Text' => $message, // REQUIRED
     'TextType' => 'text',
     'VoiceId' => $voice
 ]);
-$mp3 = $result['AudioStream']->__toString();
-file_put_contents('sdk.mp3', $mp3);
-echo '<video controls="" autoplay="" name="media"><source src="/polly/sdk.mp3" type="audio/mpeg"></video>';
+
+$mp3str = $result['AudioStream']->__toString();
+
+file_put_contents($filename, $mp3str);//replace this with an s3 bucket.
+echo '<video controls="" autoplay="" name="media"><source src="/polly/'.$filename.'" type="audio/mpeg"></video>';
 ?>
