@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>Gabe's Site that Talks to You.</title>
+        <style>
+        .field-wrapper{
+            padding: .5em;
+        }
+        #audioPlayer video{
+            height: 50px;
+        }
+        #talkButton{
+            color: #333;
+            background-color: #eee;
+            border-color: #ccc;
+            border-radius 2px;
+        }
+        #talkButton.loading{
+            color: #aaa;
+            background-color: #ddd;
+            border-color: #bbb;
+        }
+        :focus {
+            outline-color: #666;
+        }
+        label{
+            clear: both;
+            display: block;
+            margin-bottom: .5em;
+        }
+        </style>
+
+    </head>
+    <body>
+    <form id="talkForm">
+        <div class="field-wrapper">
+            <label for="name">What is your name?</label>
+            <input type="text" placeholder="Type your name here" id="name">
+        </div>
+        <div class="field-wrapper">
+            <label for="selections">What would you like to talk about?</label>
+            <select id="selections" multiple>
+                <option value="time">The Time</option>
+                <option value="weather">The Weather</option>
+                <option value="browser">Web Browsers</option>
+            </select>
+        </div>
+        <div class="field-wrapper">
+            <input id="talkButton" type="submit" value="Say Hi">
+        </div>
+    </form>
+    <div id="audioPlayer"></div>
+
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/loadSpeech.js"></script>
+    </body>
+</html>

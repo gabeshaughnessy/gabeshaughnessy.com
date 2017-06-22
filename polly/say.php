@@ -23,22 +23,30 @@ if(isset($_GET['name']) && !empty($_GET['name'])){
  $name = 'there';
 }
 //Time
-date_default_timezone_set('America/Los_Angeles');
-$time = 'I presently reside on a server in Oregon, where it is currently '. date('g:i A') .'. ';
+if(isset($_GET['time'])){
+
+
+    date_default_timezone_set('America/Los_Angeles');
+    $time = 'I presently reside on a server in Oregon, where it is currently '. date('g:i A') .'. ';
+}else{
+    $time = '';
+}
 
 //Weather
-$weatherAPIkey ='APPID=1794446ecd9deb919b2575a760e4ce9a';
-$location = 'zip=97203';
-$url = 'http://api.openweathermap.org/data/2.5/weather?units=imperial&'.$location.'&'.$weatherAPIkey;
-$ch = curl_init($url);
-    curl_setopt($ch,  CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('accept: application/json',));
-$response = json_decode(curl_exec($ch));
+if(isset($_GET['weather'])){
+    $weatherAPIkey ='APPID=1794446ecd9deb919b2575a760e4ce9a';
+    $location = 'zip=97203';
+    $url = 'http://api.openweathermap.org/data/2.5/weather?units=imperial&'.$location.'&'.$weatherAPIkey;
+    $ch = curl_init($url);
+        curl_setopt($ch,  CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('accept: application/json',));
 
+    $response = json_decode(curl_exec($ch));
+}
 if(isset($response->weather) && !empty($response->weather[0])){
     $temp = $response->main->temp;
     $conditions = $response->weather[0]->description;
-    $weather = 'It is '.$temp.' degrees Farenheit and '.$conditions.'. ';
+    $weather = 'Where I am, it is '.$temp.' degrees Farenheit and '.$conditions.'. ';
 }else{
     $weather = '';
 }
@@ -47,19 +55,45 @@ if(isset($response->weather) && !empty($response->weather[0])){
 
 
 //Browser
-if(isset($_GET['browser']) && !empty($_GET['browser'])){
- $browser = 'It looks like you are using '.filter_input(INPUT_GET,'browser',FILTER_SANITIZE_STRING).' to visit this web page. ';
-}else{
- $browser = '';
+if(isset($_GET['browser'])){
+    $whichBrowser = new WhichBrowser\Parser(getallheaders());
+    if(isset($whichBrowser) && !empty($whichBrowser)){
+     $browser = 'It looks like you are using '.$whichBrowser->browser->name.' browser to visit this web page. ';
+     if($whichBrowser->browser->name == 'Chrome'){
+        $browser .= 'Excellent choice my friend. Of all the internet browsers, Chrome is my favorite. ';
+     }elseif($whichBrowser->browser->name == 'Firefox'){
+        $browser .= 'I find that use of Firefox generally indicates a distinguished internet browser. ';
+     }
+     elseif($whichBrowser->browser->name == 'Safari'){
+        if($whichBrowser->device->manufacturer == 'Apple'){
+        $browser .= 'Considering that you are on a '.$whichBrowser->device->model.', I would guess that you don\'t customize your web browser much, do you? Safari comes installed by default on Apple devices. ';
+        }else{
+            $browser .= 'I will never understand why some people use Safari. Especially people like you who are not even using an Apple device. ';
+        }
+     }elseif($whichBrowser->browser->name == 'Opera'){
+        $browser .= 'That leads me to believe you are probably browsing on a VPN, because why else use Opera?';
+     }
+     $device = 'I also see that you are on a '.$whichBrowser->device->model.', manufactured by '.$whichBrowser->device->manufacturer.'. ';
+     if($whichBrowser->device->manufacturer == 'Apple'){
+        $device .= 'You must have a lot of cash lying around to afford one of those fancy machines.';
+     }else{
+        $device .= 'A sensible choice, for the sensible internet user. I applaud you. ';
+     }
+    }else{
+     $browser = '';
+     $device = '';
+    }
 }
+
+
 //Message
 
 $greeting = 'Hello ';
 
 $message = $greeting.$name.', My name is '.$voice.'. ';
-$message .= $time.$weather.$browser;
+$message .= $time.$weather.$browser.$device;
 
-$message.= 'What you are hearing is actually a recording of my voice, saved as a file somewhere in the cloud';
+//$message.= 'What you are hearing is actually a recording of my voice, saved as a file somewhere in the cloud';
 
 
 
