@@ -1,6 +1,7 @@
 #ignoring everything in the root except wp-content
 /*
 !wp-content/
+!polly/
 !readme.md
 
 #ignore all the files that start with a . except this one
