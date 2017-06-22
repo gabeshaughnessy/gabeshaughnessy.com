@@ -81,12 +81,13 @@ $s3Client = $sdk->createS3();
 
 $bucket = 'uploads.gabeshaughnessy.com';
 $directory = 'mp3';
+$filepath = $directory.'/'.$filename;
 $putFile = $s3Client->putObject([
     'Bucket' => $bucket,
-    'Key'    => $filename,
-    'Body'   => $directory.'/'.$mp3str
+    'Key'    => $filepath,
+    'Body'   => $mp3str
 ]);
-$mp3url = $s3Client->getObjectUrl($bucket, $filename);
+$mp3url = $s3Client->getObjectUrl($bucket, $filepath);
 
 echo '<video controls="" autoplay="" name="media"><source src="'.$mp3url.'" type="audio/mpeg"></video>';
 ?>
