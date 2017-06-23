@@ -18,7 +18,7 @@ if(isset($_GET['voice']) && in_array(filter_input(INPUT_GET,'voice',FILTER_SANIT
 }
 
 if(isset($_GET['name']) && !empty($_GET['name'])){
- $name = filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING);
+ $name = urldecode(filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING));
 }else{
  $name = 'there';
 }

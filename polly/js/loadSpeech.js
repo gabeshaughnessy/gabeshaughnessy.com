@@ -7,8 +7,9 @@ jQuery('#talkForm').on('submit', function(e){
             options = options + '&'+jQuery('#selections').val()[i]+'=true';
 
         }
-        var name = jQuery('#name').val();
-        var uri = 'say.php?name='+name+options;
+        var name = encodeURI(jQuery('#name').val());
+        var voice = encodeURI(jQuery('#voices').val());
+        var uri = 'say.php?name='+name+'&voice='+voice+options;
         jQuery('#audioPlayer').load(uri, function(){
             jQuery('#talkButton').removeClass('loading').val('Say Hi');
         });
