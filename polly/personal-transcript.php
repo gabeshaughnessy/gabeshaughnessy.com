@@ -190,11 +190,16 @@ _wq.push({ id: "99ig15zsqb", onReady: function(video) {
       jQuery('#voiceover5').trigger('play');
     });
   video.bind("crosstime", 154, function() {
+      soundtrack.volume = 0.5;
+      soundtrack.play();
       jQuery('.voiceover').trigger('pause');
       jQuery('#voiceover6').trigger('play');
     });
   video.bind("pause", function() {
     video.volume(0);
+    jQuery('audio').trigger('pause');
+    });
+  video.bind("end", function() {
     jQuery('audio').trigger('pause');
     });
 }});
