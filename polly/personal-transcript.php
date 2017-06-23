@@ -151,7 +151,7 @@ for($i=0; $i < count($messages); $i++) {
     echo '<audio style="display:none;" class="voiceover" id="voiceover'.$i.'"><source src="'.$mp3url.'" type="audio/mpeg"></audio>';
 }
 ?>
-<audio id="soundtrack"><source src="https://s3-us-west-2.amazonaws.com/uploads.gabeshaughnessy.com/soundtrack/oaklawn-dreams.mp3" type="audio/mpeg"></audio>
+<audio id="soundtrack" loop=""><source src="https://s3-us-west-2.amazonaws.com/uploads.gabeshaughnessy.com/soundtrack/oaklawn-dreams.mp3" type="audio/mpeg"></audio>
 
 <script src="https://fast.wistia.com/embed/medias/99ig15zsqb.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script>
 <script src="js/jquery-3.2.1.min.js"></script>
@@ -190,8 +190,6 @@ _wq.push({ id: "99ig15zsqb", onReady: function(video) {
       jQuery('#voiceover5').trigger('play');
     });
   video.bind("crosstime", 154, function() {
-      soundtrack.volume = 0.5;
-      soundtrack.play();
       jQuery('.voiceover').trigger('pause');
       jQuery('#voiceover6').trigger('play');
     });
